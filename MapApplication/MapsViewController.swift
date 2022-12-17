@@ -14,16 +14,15 @@ import CoreData
 
 
 class MapsViewController: UIViewController {
-
     
-    
-    
-    
-    var locationManager = CLLocationManager()
+    var locationManager = CLLocationManager()//created to get location
     
     var choosenLatitude:Double?
     var choosenLongitude:Double?
     
+    var choosenPlaceName:String?
+    var choosenPlaceID:UUID?
+   
     
     @IBOutlet weak var titleTextField: UITextField!
     
@@ -45,6 +44,19 @@ class MapsViewController: UIViewController {
         
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(chooseLocation(gestureRecognizer:)))
         
+        if choosenPlaceName != ""{
+            
+            //fetch data from coredata
+            if let uuid = choosenPlaceID?.uuidString{
+                
+                print("uuid:\(uuid)")
+            }
+            
+        }else{
+            
+            //add new place
+            
+        }
         
         gestureRecognizer.minimumPressDuration = 3 // you need to tap 3 second to get location
         

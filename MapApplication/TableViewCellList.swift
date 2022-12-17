@@ -9,7 +9,9 @@ import UIKit
 
 class TableViewCellList: UITableViewCell {
 
-    @IBOutlet weak var listLabel: UILabel!
+    @IBOutlet weak var listLabel: UILabel! //name
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
