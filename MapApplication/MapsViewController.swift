@@ -178,18 +178,50 @@ extension MapsViewController:MKMapViewDelegate{
         if pinView == nil{
             
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseAnnID)
+            
             pinView?.canShowCallout = true //annotation show extra anything?
             
             pinView?.tintColor = .red
             
             let button = UIButton(type: .detailDisclosure)
-            pinView?.rightCalloutAccessoryView = button 
+            pinView?.rightCalloutAccessoryView = button
         }else{
             
             pinView?.annotation = annotation
         }
         
         return pinView
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {// when annotation accessory button  clicked what we will do? we will take a roadmap
+        
+        if choosenPlaceName != ""{
+            
+            let requestLoc = CLLocation(latitude: annotationLat!, longitude: annotationLong!)
+            
+            CLGeocoder().reverseGeocodeLocation(requestLoc) {
+                
+                (placemarkArray, error) in
+                
+                if let placemarkA = placemarkArray{
+                    
+                    if placemarkA.count > 0{
+                        
+                        let onePlacemark = MKPlacemark(placemark: placemarkA[0])
+                        
+                        let item = MKMapItem(placemark: onePlacemark)
+                        
+                        item.name = self.annotationTitle
+                    
+                        let launchOptions = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving]
+                        
+                        item.openInMaps(launchOptions: launchOptions)
+                        
+                    }
+                }
+            }
+        }
+        
     }
     
     
