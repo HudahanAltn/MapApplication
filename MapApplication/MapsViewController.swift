@@ -165,6 +165,34 @@ class MapsViewController: UIViewController {
 
 extension MapsViewController:MKMapViewDelegate{
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? { // we will create annotation  and it will return
+        
+        if annotation is MKUserLocation{ //i f annotation user location we wil not do anything
+            
+            return nil
+        }
+        
+        let reuseAnnID = "myAnnotation"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseAnnID)
+        
+        if pinView == nil{
+            
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseAnnID)
+            pinView?.canShowCallout = true //annotation show extra anything?
+            
+            pinView?.tintColor = .red
+            
+            let button = UIButton(type: .detailDisclosure)
+            pinView?.rightCalloutAccessoryView = button 
+        }else{
+            
+            pinView?.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
+    
     @objc func chooseLocation(gestureRecognizer:UILongPressGestureRecognizer){
         
         if gestureRecognizer.state == .began{ //when gestureRec began
