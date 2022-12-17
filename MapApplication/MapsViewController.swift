@@ -23,6 +23,10 @@ class MapsViewController: UIViewController {
     var choosenPlaceName:String?
     var choosenPlaceID:UUID?
    
+    var annotationTitle:String?
+    var annotationSubTitle:String?
+    var annotationLat:Double?
+    var annotationLong:Double?
     
     @IBOutlet weak var titleTextField: UITextField!
     
@@ -50,6 +54,55 @@ class MapsViewController: UIViewController {
             if let uuid = choosenPlaceID?.uuidString{
                 
                 print("uuid:\(uuid)")
+                
+                let AppDelegatee = UIApplication.shared.delegate as! AppDelegate //core data
+                let contextt = AppDelegatee.persistentContainer.viewContext // coredata access
+                
+                let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Place")
+                fetchRequest.predicate = NSPredicate(format: "id = %@", uuid)
+                fetchRequest.returnsObjectsAsFaults = false
+                
+                do{
+                    
+                    let results = try contextt.fetch(fetchRequest)
+                    
+                    if results.count > 0 {
+                        
+                        for i in results as! [NSManagedObject]{
+                            
+                            if let name = i.value(forKey: "name") as? String, let note = i.value(forKey: "note") as? String,let lati = i.value(forKey: "latitude") as? Double, let longi = i.value(forKey: "longitude") as? Double {
+                                
+                                annotationTitle = name
+                                annotationSubTitle = note
+                                annotationLat = lati
+                                annotationLong = longi
+                                
+                                let annotation = MKPointAnnotation()
+                                annotation.title = annotationTitle
+                                annotation.subtitle = annotationSubTitle
+                                
+                                
+                                let coordinate = CLLocationCoordinate2D(latitude: annotationLat!, longitude: annotationLong!)
+                                
+                                annotation.coordinate = coordinate
+                                mapView.addAnnotation(annotation)
+                                
+                                titleTextField.text = annotationTitle
+                                noteTextField.text = annotationSubTitle
+                                
+                            }
+                            
+                          
+                        }
+                        
+                    }
+                    
+                }catch{
+                    
+                    print("Error")
+                }
+                
+                
             }
             
         }else{
