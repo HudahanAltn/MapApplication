@@ -50,7 +50,8 @@ class ListViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         
-        fetchData()
+        NotificationCenter.default.addObserver(self, selector: #selector(fetchData), name: NSNotification.Name("newPlaceCreated"), object: nil) // we added observer because when user add new place it will show on table view
+        
         tableViewList.reloadData()
         
         
@@ -64,7 +65,7 @@ class ListViewController: UIViewController {
     }
                   
     
-    func fetchData(){
+    @objc func fetchData(){
         
         let AppDelegatee = UIApplication.shared.delegate as! AppDelegate //core data
         let contextt = AppDelegatee.persistentContainer.viewContext // coredata access

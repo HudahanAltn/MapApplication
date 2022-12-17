@@ -146,11 +146,17 @@ class MapsViewController: UIViewController {
         do{
             
             try contextt.save()
+            
+            //if new place created . we broadcasting .
+            NotificationCenter.default.post(name: NSNotification.Name("newPlaceCreated"), object: nil)
+            navigationController?.popViewController(animated: true)//return listVC
             print("save succesfully")
         }catch{
             
             print("save not successfully")
         }
+        
+      
     }
     
 
