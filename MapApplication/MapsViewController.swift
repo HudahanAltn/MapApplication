@@ -77,18 +77,30 @@ class MapsViewController: UIViewController {
                                 annotationLat = lati
                                 annotationLong = longi
                                 
-                                let annotation = MKPointAnnotation()
+                                let annotation = MKPointAnnotation() //create annotation
+                                //pass data to annonation
                                 annotation.title = annotationTitle
                                 annotation.subtitle = annotationSubTitle
                                 
-                                
+                                //create coordianae a pass param from coredata to class
                                 let coordinate = CLLocationCoordinate2D(latitude: annotationLat!, longitude: annotationLong!)
                                 
-                                annotation.coordinate = coordinate
-                                mapView.addAnnotation(annotation)
+                                annotation.coordinate = coordinate // set coordinate
+                                mapView.addAnnotation(annotation)// add
                                 
+                                //add tf
                                 titleTextField.text = annotationTitle
                                 noteTextField.text = annotationSubTitle
+                                
+                                locationManager.stopUpdatingLocation()//user want to see added location on map . Mapview have to stop your current location because map view show us current locaiton not added place location
+                                
+                                
+                                //added place location span and region
+                                let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05) // create span
+                                
+                                let region = MKCoordinateRegion(center: coordinate, span: span) // create region
+                                
+                                mapView.setRegion(region, animated: true) // set region
                                 
                             }
                             
@@ -178,17 +190,21 @@ extension MapsViewController:CLLocationManagerDelegate{
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        let myLocation:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude) // get locaiton
-        
-        let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05) // create span
-        
-        let region = MKCoordinateRegion(center: myLocation, span: span) // create region
-        
-        mapView.setRegion(region, animated: true) // set region
-        
-        
-        print("latitude: \(locations[0].coordinate.latitude)")
-        print("longitutde: \(locations[0].coordinate.longitude)")
+        if choosenPlaceName == ""{ // user choose add to newplace
+            
+            // we will get user location
+            let myLocation:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude) // get locaiton
+            
+            let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05) // create span
+            
+            let region = MKCoordinateRegion(center: myLocation, span: span) // create region
+            
+            mapView.setRegion(region, animated: true) // set region
+            
+            
+            print("latitude: \(locations[0].coordinate.latitude)")
+            print("longitutde: \(locations[0].coordinate.longitude)")
+        }
         
     }
     
