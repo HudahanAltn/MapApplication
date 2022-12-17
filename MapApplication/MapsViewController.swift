@@ -13,7 +13,7 @@ import CoreData
 
 
 
-class ViewController: UIViewController {
+class MapsViewController: UIViewController {
 
     
     
@@ -80,7 +80,7 @@ class ViewController: UIViewController {
 }
 
 
-extension ViewController:MKMapViewDelegate{
+extension MapsViewController:MKMapViewDelegate{
     
     @objc func chooseLocation(gestureRecognizer:UILongPressGestureRecognizer){
         
@@ -108,7 +108,7 @@ extension ViewController:MKMapViewDelegate{
     
 }
 
-extension ViewController:CLLocationManagerDelegate{
+extension MapsViewController:CLLocationManagerDelegate{
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
